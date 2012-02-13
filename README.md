@@ -26,3 +26,40 @@ I know, I know..  This script isn't very "pro Youtube" but before you send me ye
 * Php5+
 * Curl
 * A belief in Santa and Unicorns
+
+# Plan for changes
+Make the system modular, where the interface between modules is command-line arguments
+and return codes where possible. A facade will be provided for ease of use.
+
+## Modules 
+* Upload a single video to Vimeo
+* Download a single video from Youtube
+
+## Facade responsibilities
+* Take a directory as an input and upload all contained videos to Vimeo
+* Take a list of Youtube videos and download them into a specified directory
+
+## Hooks
+Hook scripts will be executed before and after uploading or downloading any single video. 
+This is to enable more advanced flow control without restricting the programming language used to do so.
+
+### Available hooks
+* Pre-upload
+* Post-upload
+* Pre-download
+* Post-download
+
+### Pre-upload, post-upload and post-download arguments
+* Path to the video file
+* MD5 hash of the video file
+
+### Pre-download arguments
+* TBC
+
+### Exit codes
+In general, a non-zero exit code from a hook will prevent the next step 
+from being carried out. For example: a pre-upload hook might check the MD5
+hash of a file against a list of hashes from files that are known to have been 
+uploaded already. If a match is found, a non-zero exit code would prevent the 
+video from being uploaded a second time. A post-upload hook could 
+store the hashes of successfully uploaded files in the aforementioned list. 
