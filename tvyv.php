@@ -5,8 +5,8 @@
  * Original author: John McLear <john@mclear.co.uk>
  * Modified by: Tom Hudson <mail@tomnomnom.com>
  */
-$settings = require __DIR__.'/include/init.php';
-$messages = require __DIR__.'/include/messages.php';
+$settings = require __DIR__.'/Include/Init.php';
+$messages = require __DIR__.'/Include/Messages.php';
 
 $logFactory = new \Factory\Logger($settings->log);
 $log = $logFactory->make();

@@ -12,16 +12,14 @@ function stderr($data){
 }
 
 spl_autoload_register(function($class){
-  $class = strToLower(str_replace('\\', '/', $class));
-  require __DIR__."/../library/{$class}.php";
+  $class = str_replace('\\', '/', $class);
+  require __DIR__."/../Library/{$class}.php";
 });
 
 set_exception_handler(function($e){
-  stderr("Uncaught exception in [{$e->getFile()}] ");
-  stderr("on line [{$e->getLine()}]\n");
-  stderr($e->getMessage()."\n");
-  stderr($e->getTraceAsString()."\n");
-
+  $type = get_class($e);
+  stderr("Uncaught {$type} [{$e->getCode()}]: {$e->getMessage()}\n");
+  stderr($e->getTraceAsString().PHP_EOL);
   exit(1);
 });
 
