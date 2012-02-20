@@ -1,0 +1,4 @@
+# Factory directory
+Factories for creating other objects.
+
+Filenames and classnames should map to abstract classes in the level above.
