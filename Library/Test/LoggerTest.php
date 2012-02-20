@@ -7,134 +7,120 @@ class LoggerTest extends \PHPUnit_Framework_TestCase {
     $l = new Mock\Logger("EMERGE"); 
 
     $l->emerge('one');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_EMERGE);
+    $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
+    $this->assertEquals($l->getLastLevel(), \Logger::LEVEL_EMERGE, "Written log level was malformed");
 
     // Check next level up doesn't log
     $l->alert('two');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_EMERGE);
+    $this->assertEquals($l->getLastMsg(), 'one', "Log written at above current level should have no effect");
   }
 
   public function testLevelAlert(){
     $l = new Mock\Logger("ALERT"); 
 
     $l->alert('one');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_ALERT);
+    $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
+    $this->assertEquals($l->getLastLevel(), \Logger::LEVEL_ALERT, "Written log level was malformed");
 
     // Check next level up doesn't log
     $l->crit('two');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_ALERT);
+    $this->assertEquals($l->getLastMsg(), 'one', "Log written at above current level should have no effect");
 
     // Check one level below does log
     $l->emerge('three');
-    $this->assertEquals(trim($l->getLastMsg()), 'three');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_EMERGE);
+    $this->assertEquals($l->getLastMsg(), 'three', "Log written below current level but had no effect");
   }
 
   public function testLevelCrit(){
     $l = new Mock\Logger("CRIT"); 
 
     $l->crit('one');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_CRIT);
+    $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
+    $this->assertEquals($l->getLastLevel(), \Logger::LEVEL_CRIT, "Written log level was malformed");
 
     // Check next level up doesn't log
     $l->err('two');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_CRIT);
+    $this->assertEquals($l->getLastMsg(), 'one', "Log written at above current level should have no effect");
 
     // Check one level below does log
     $l->alert('three');
-    $this->assertEquals(trim($l->getLastMsg()), 'three');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_ALERT);
+    $this->assertEquals($l->getLastMsg(), 'three', "Log written below current level but had no effect");
   }
 
   public function testLevelErr(){
     $l = new Mock\Logger("ERR"); 
 
     $l->err('one');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_ERR);
+    $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
+    $this->assertEquals($l->getLastLevel(), \Logger::LEVEL_ERR, "Written log level was malformed");
 
     // Check next level up doesn't log
     $l->warn('two');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_ERR);
+    $this->assertEquals($l->getLastMsg(), 'one', "Log written at above current level should have no effect");
 
     // Check one level below does log
     $l->crit('three');
-    $this->assertEquals(trim($l->getLastMsg()), 'three');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_CRIT);
+    $this->assertEquals($l->getLastMsg(), 'three', "Log written below current level but had no effect");
   }
 
   public function testLevelWarn(){
     $l = new Mock\Logger("WARN"); 
 
     $l->warn('one');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_WARN);
+    $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
+    $this->assertEquals($l->getLastLevel(), \Logger::LEVEL_WARN, "Written log level was malformed");
 
     // Check next level up doesn't log
     $l->notice('two');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_WARN);
+    $this->assertEquals($l->getLastMsg(), 'one', "Log written at above current level should have no effect");
 
     // Check one level below does log
     $l->err('three');
-    $this->assertEquals(trim($l->getLastMsg()), 'three');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_ERR);
+    $this->assertEquals($l->getLastMsg(), 'three', "Log written below current level but had no effect");
   }
 
   public function testLevelNotice(){
     $l = new Mock\Logger("NOTICE"); 
 
     $l->notice('one');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_NOTICE);
+    $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
+    $this->assertEquals($l->getLastLevel(), \Logger::LEVEL_NOTICE, "Written log level was malformed");
 
     // Check next level up doesn't log
     $l->info('two');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_NOTICE);
+    $this->assertEquals($l->getLastMsg(), 'one', "Log written at above current level should have no effect");
 
     // Check one level below does log
     $l->warn('three');
-    $this->assertEquals(trim($l->getLastMsg()), 'three');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_WARN);
+    $this->assertEquals($l->getLastMsg(), 'three', "Log written below current level but had no effect");
   }
 
   public function testLevelInfo(){
     $l = new Mock\Logger("INFO"); 
 
     $l->info('one');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_INFO);
+    $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
+    $this->assertEquals($l->getLastLevel(), \Logger::LEVEL_INFO, "Written log level was malformed");
 
     // Check next level up doesn't log
     $l->debug('two');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_INFO);
+    $this->assertEquals($l->getLastMsg(), 'one', "Log written at above current level should have no effect");
 
     // Check one level below does log
     $l->notice('three');
-    $this->assertEquals(trim($l->getLastMsg()), 'three');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_NOTICE);
+    $this->assertEquals($l->getLastMsg(), 'three', "Log written below current level but had no effect");
   }
 
   public function testLevelDebug(){
     $l = new Mock\Logger("DEBUG"); 
 
     $l->debug('one');
-    $this->assertEquals(trim($l->getLastMsg()), 'one');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_DEBUG);
+    $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
+    $this->assertEquals($l->getLastLevel(), \Logger::LEVEL_DEBUG, "Written log level was malformed");
 
     // Check one level below does log
     $l->info('two');
-    $this->assertEquals(trim($l->getLastMsg()), 'two');
-    $this->assertEquals(trim($l->getLastLevel()), \Logger::LEVEL_INFO);
+    $this->assertEquals($l->getLastMsg(), 'two', "Log written below current level but had no effect");
   }
 }
 
