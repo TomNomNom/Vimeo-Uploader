@@ -51,42 +51,42 @@ abstract class Logger {
 
   public function emerge($msg){
     if ($this->level < self::LEVEL_EMERGE) return;
-    $this->log($msg.PHP_EOL, self::LEVEL_EMERGE);
+    $this->log($msg, self::LEVEL_EMERGE);
   }
 
   public function alert($msg){
     if ($this->level < self::LEVEL_ALERT) return;
-    $this->log($msg.PHP_EOL, self::LEVEL_ALERT);
+    $this->log($msg, self::LEVEL_ALERT);
   }
 
   public function crit($msg){
     if ($this->level < self::LEVEL_CRIT) return;
-    $this->log($msg.PHP_EOL, self::LEVEL_CRIT);
+    $this->log($msg, self::LEVEL_CRIT);
   }
 
   public function err($msg){
     if ($this->level < self::LEVEL_ERR) return;
-    $this->log($msg.PHP_EOL, self::LEVEL_ERR);
+    $this->log($msg, self::LEVEL_ERR);
   }
 
   public function warn($msg){
     if ($this->level < self::LEVEL_WARN) return;
-    $this->log($msg.PHP_EOL, self::LEVEL_WARN);
+    $this->log($msg, self::LEVEL_WARN);
   }
 
   public function notice($msg){
     if ($this->level < self::LEVEL_NOTICE) return;
-    $this->log($msg.PHP_EOL, self::LEVEL_NOTICE);
+    $this->log($msg, self::LEVEL_NOTICE);
   }
   
   public function info($msg){
     if ($this->level < self::LEVEL_INFO) return;
-    $this->log($msg.PHP_EOL, self::LEVEL_INFO);
+    $this->log($msg, self::LEVEL_INFO);
   }
 
   public function debug($msg){
     if ($this->level < self::LEVEL_DEBUG) return;
-    $this->log($msg.PHP_EOL, self::LEVEL_DEBUG);
+    $this->log($msg, self::LEVEL_DEBUG);
   }
 
 }

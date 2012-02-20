@@ -1,5 +1,4 @@
 <?php
-namespace Test;
 
 class CompatibilityTest extends \PHPUnit_Framework_TestCase {
   public function testCurl(){

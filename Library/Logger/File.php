@@ -19,7 +19,7 @@ class File extends \Logger {
     $level = $this->getLevelString($level);
     $date  = $this->getDateString(time());
 
-    $line = "[{$date}] {$level}: {$msg}";
+    $line = "[{$date}] {$level}: {$msg}\n";
     fputs($this->handle, $line, strlen($line));
   }
 
