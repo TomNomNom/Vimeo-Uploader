@@ -237,7 +237,7 @@ class Client
                 return $response;
             }
             else if ($response->err) {
-                throw new VimeoAPIException($response->err->msg, $response->err->code);
+                throw new Exception($response->err->msg, $response->err->code);
             }
 
             return false;
@@ -407,7 +407,7 @@ class Client
         // Make sure we have enough room left in the user's quota
         $quota = $this->call('vimeo.videos.upload.getQuota');
         if ($quota->user->upload_space->free < $file_size) {
-            throw new VimeoAPIException('The file is larger than the user\'s remaining quota.', 707);
+            throw new Exception('The file is larger than the user\'s remaining quota.', 707);
         }
 
         // Get an upload ticket
@@ -423,14 +423,14 @@ class Client
 
         // Make sure we're allowed to upload this size file
         if ($file_size > $rsp->ticket->max_file_size) {
-            throw new VimeoAPIException('File exceeds maximum allowed size.', 710);
+            throw new Exception('File exceeds maximum allowed size.', 710);
         }
 
         // Split up the file if using multiple pieces
         $chunks = array();
         if ($use_multiple_chunks) {
             if (!is_writeable($chunk_temp_dir)) {
-                throw new \Exception('Could not write chunks. Make sure the specified folder has write access.');
+                throw new Exception('Could not write chunks. Make sure the specified folder has write access.');
             }
 
             // Create pieces
@@ -514,7 +514,7 @@ class Client
             return $complete->ticket->video_id;
         }
         else if ($complete->err) {
-            throw new VimeoAPIException($complete->err->msg, $complete->err->code);
+            throw new Exception($complete->err->msg, $complete->err->code);
         }
     }
 
@@ -549,4 +549,3 @@ class Client
 
 }
 
-class VimeoAPIException extends \Exception {}

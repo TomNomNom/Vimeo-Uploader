@@ -1,23 +1,18 @@
 #!/usr/bin/env php
 <?php
-$settings = require __DIR__.'/Include/Init.php';
+$settings = require __DIR__.'/../Include/Init.php';
+$factory = new \Factory\Vimeo($settings);
 
-if (
-  isset($settings->vimeo['token']) ||
-  isset($settings->vimeo['token_secret']) 
-  ){
 
+if ($factory->haveToken()){
   echo "It looks like you've already authorized your account!\n\n";
   echo "If you need to re-authorize your account just remove the "
-      ."'token' and 'token_secret' settings from your config.ini and re-run this script.\n\n";
+      ."'token' and 'token_secret' settings from your config.ini and re-run this script.\n";
   
   exit(0);
 }
 
-$client = new \Vimeo\Client(
-  $settings->vimeo['consumer_key'], 
-  $settings->vimeo['consumer_secret']
-);
+$client = $factory->make();
 
 echo "Please visit this URL and allow the application to access your account: \n\n";
 echo "  ".$client->getAuthUrl('write');
@@ -53,6 +48,5 @@ echo "It worked! Please edit the [vimeo] section of your config.ini file so that
 echo "  token        = \"{$accessToken['oauth_token']}\"\n";
 echo "  token_secret = \"{$accessToken['oauth_token_secret']}\"\n";
 
-echo "\n\n";
 
 exit(0);
