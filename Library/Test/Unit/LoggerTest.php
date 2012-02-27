@@ -1,10 +1,10 @@
 <?php
-namespace Test;
+namespace Test\Unit;
 
 // We're testing the functionality of the abstract logger; so we just test the mock directly
 class LoggerTest extends \PHPUnit_Framework_TestCase {
   public function testLevelEmerge(){
-    $l = new Mock\Logger("EMERGE"); 
+    $l = new \Test\Mock\Logger("EMERGE"); 
 
     $l->emerge('one');
     $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
@@ -16,7 +16,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testLevelAlert(){
-    $l = new Mock\Logger("ALERT"); 
+    $l = new \Test\Mock\Logger("ALERT"); 
 
     $l->alert('one');
     $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
@@ -32,7 +32,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testLevelCrit(){
-    $l = new Mock\Logger("CRIT"); 
+    $l = new \Test\Mock\Logger("CRIT"); 
 
     $l->crit('one');
     $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
@@ -48,7 +48,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testLevelErr(){
-    $l = new Mock\Logger("ERR"); 
+    $l = new \Test\Mock\Logger("ERR"); 
 
     $l->err('one');
     $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
@@ -64,7 +64,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testLevelWarn(){
-    $l = new Mock\Logger("WARN"); 
+    $l = new \Test\Mock\Logger("WARN"); 
 
     $l->warn('one');
     $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
@@ -80,7 +80,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testLevelNotice(){
-    $l = new Mock\Logger("NOTICE"); 
+    $l = new \Test\Mock\Logger("NOTICE"); 
 
     $l->notice('one');
     $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
@@ -96,7 +96,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testLevelInfo(){
-    $l = new Mock\Logger("INFO"); 
+    $l = new \Test\Mock\Logger("INFO"); 
 
     $l->info('one');
     $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");
@@ -112,7 +112,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase {
   }
 
   public function testLevelDebug(){
-    $l = new Mock\Logger("DEBUG"); 
+    $l = new \Test\Mock\Logger("DEBUG"); 
 
     $l->debug('one');
     $this->assertEquals($l->getLastMsg(), 'one', "Written log message was malformed");

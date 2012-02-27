@@ -1,5 +1,6 @@
 <?php
-class phpVimeo
+namespace Vimeo;
+class Client
 {
     const API_REST_URL = 'http://vimeo.com/api/rest/v2';
     const API_AUTH_URL = 'http://vimeo.com/oauth/authorize';
@@ -253,10 +254,19 @@ class phpVimeo
      */
     public function auth($permission = 'read', $callback_url = 'oob')
     {
+        $url = $this->getAuthUrl($permission, $callback_url);
+        header("Location: {$url}");
+    }
+
+    /**
+     * TomH
+     */
+    public function getAuthUrl($permission = 'read', $callback_url = 'oob')
+    {
         $t = $this->getRequestToken($callback_url);
         $this->setToken($t['oauth_token'], $t['oauth_token_secret'], 'request', true);
         $url = $this->getAuthorizeUrl($this->_token, $permission);
-        header("Location: {$url}");
+        return $url;
     }
 
     /**
@@ -278,7 +288,7 @@ class phpVimeo
     /**
      * Enable the cache.
      *
-     * @param string $type The type of cache to use (phpVimeo::CACHE_FILE is built in)
+     * @param string $type The type of cache to use (Client::CACHE_FILE is built in)
      * @param string $path The path to the cache (the directory for CACHE_FILE)
      * @param int $expire The amount of time to cache responses (default 10 minutes)
      */
@@ -420,7 +430,7 @@ class phpVimeo
         $chunks = array();
         if ($use_multiple_chunks) {
             if (!is_writeable($chunk_temp_dir)) {
-                throw new Exception('Could not write chunks. Make sure the specified folder has write access.');
+                throw new \Exception('Could not write chunks. Make sure the specified folder has write access.');
             }
 
             // Create pieces
@@ -527,7 +537,7 @@ class phpVimeo
     public static function url_encode_rfc3986($input)
     {
         if (is_array($input)) {
-            return array_map(array('phpVimeo', 'url_encode_rfc3986'), $input);
+            return array_map(array('\Vimeo\Client', 'url_encode_rfc3986'), $input);
         }
         else if (is_scalar($input)) {
             return str_replace(array('+', '%7E'), array(' ', '~'), rawurlencode($input));
@@ -539,4 +549,4 @@ class phpVimeo
 
 }
 
-class VimeoAPIException extends Exception {}
+class VimeoAPIException extends \Exception {}
