@@ -31,3 +31,6 @@ the full path to the video being uploaded as its only argument.
 If the upload succeeds: all executable files in ./Hooks/Postupload will be executed. Each hook will be given 
 the full path to the uploaded video as its only argument.
 
+The suggested use-case for hooks is to store an MD5 hash of a file post-upload, and checking if the MD5 hash
+of a file has already been stored on pre-upload to avoid uploading the same video twice. Some example hooks
+written in PHP are provided that do just this; albeit in a simplistic manner.
