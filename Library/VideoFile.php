@@ -12,5 +12,9 @@ class VideoFile {
   public function getSize(){
     return filesize($this->filename);
   }
+
+  public function getID3(){
+    return id3_get_tag($this->filename);
+  }
 }
 

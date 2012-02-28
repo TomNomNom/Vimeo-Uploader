@@ -45,3 +45,9 @@ $file = new VideoFile($filename);
 if ($file->getSize() > $freeSpace){
   $log->err("[{$filename}] ({$file->getSize()} bytes) is larger than quota ({$freeSpace} bytes)");
 }
+
+//$id3 = $file->getID3();
+
+$log->err("Failed to upload [$filename]");
+exit(1);
+

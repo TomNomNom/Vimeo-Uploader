@@ -22,10 +22,10 @@ I know, I know..  This script isn't very "pro Youtube" but before you send me ye
 * Test by running index.php (php index.php)
 * Once you are happy, change debug to false in config.php and add a cron job if you like
 
-#PRE-REQS
-* Php5+
-* Curl
-* A belief in Santa and Unicorns
+# Requirements
+* PHP 5.3+
+* PHP Curl
+* PHP ID3 extension (http://www.php.net/manual/en/book.id3.php)
 
 # Plan for changes
 Make the system modular, where the interface between modules is command-line arguments
