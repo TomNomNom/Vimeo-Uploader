@@ -16,5 +16,15 @@ class VideoFile {
   public function getID3(){
     return id3_get_tag($this->filename);
   }
+
+  public function getTitle(){
+    // TODO: Get from ID3
+    return 'Default title';
+  }
+
+  public function getDescription(){
+    // TODO: Get from ID3
+    return 'Default description';
+  }
 }
 

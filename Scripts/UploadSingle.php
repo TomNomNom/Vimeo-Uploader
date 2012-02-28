@@ -22,22 +22,23 @@ $executeHooks = function ($stage, $videoFile) use($log){
   $returnValues = array();
   $stage = ucFirst(strToLower($stage));
 
-  $log->info("Running {$stage} hooks for [{$videoFile}]");
+  $log->info("Executing {$stage} hooks for [{$videoFile}]");
   $i = new DirectoryIterator(__DIR__."/../Hooks/{$stage}");
 
   foreach ($i as $file){
     if (!$file->isFile()) continue;
+    $fullPath = realpath($file->getPathname());
 
     if (!$file->isExecutable()){
-      $log->debug("Skipping non-executable {$stage} hook [".$file->getPathname()."]");
+      $log->debug("Skipping non-executable {$stage} hook [{$fullPath}]");
       continue;
     }
     
-    $log->info("Executing {$stage} hook [".$file->getPathname()."]");
+    $log->info("Executing {$stage} hook [{$fullPath}]");
     $cmd = $file->getPathname().' '.escapeshellarg($videoFile);
     exec($cmd, $output, $returnValue);
     if ($returnValue != 0){
-      $log->warn('['.$file->getPathname().'] had a non-zero return code');
+      $log->warn("[{$fullPath}] had a non-zero return code for [{$videoFile}]");
     }
     $returnValues[] = $returnValue;
   }
@@ -89,16 +90,42 @@ if ($file->getSize() > $freeSpace){
 $hookResponse = $executeHooks('Preupload', $filename);
 if (!$hookResponse){
   $log->warn("At least one hook had a non-zero return code for [{$filename}]; will not attempt upload");
-  continue;
-}
-
-// Do the actual upload here <- Not here whilst in development
-
-if ($uploadWorked){
-  $executeHooks('Postupload', $filename);
-} else {
-  $log->err("Failed to upload [{$filename}]");
   exit(1);
 }
+
+// Actual upload of the video
+if (!$settings->debug['dry_run']){
+  try {
+
+    $videoId = $client->upload($filename);
+
+    if ($videoId) {
+      // Set the title
+      $client->call('vimeo.videos.setTitle', array(
+        'title'    => $file->getTitle(),
+        'video_id' => $videoId
+      ));
+
+      // Set the description
+      $client->call('vimeo.videos.setDescription', array(
+        'description' => $file->getDescription(),
+        'video_id'    => $videoId
+      ));
+    } else {
+      $log->err("An unxpected error occured");
+      exit(1); 
+    }
+
+  } catch (\Vimeo\Exception $e) {
+    $log->err("An unexpected error occured [".$e->getCode()."] (".$e->getMessage().")");
+    $log->err("Failed to upload [{$filename}]");
+    exit(1);
+  }
+} else {
+  $log->debug("Performing dry run; would have attempted upload for [{$filename}]");
+}
+
+// It worked if we got this far
+$executeHooks('Postupload', $filename);
 
 exit(0);
