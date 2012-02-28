@@ -17,35 +17,6 @@ if ($argc < 2){
 }
 $directory = $argv[1];
 
-$executeHooks = function ($stage, $videoFile) use($log){
-  $returnValues = array();
-  $stage = ucFirst(strToLower($stage));
-
-  $log->info("Running {$stage} hooks for [{$videoFile}]");
-  $i = new DirectoryIterator(__DIR__."/../Hooks/{$stage}");
-
-  foreach ($i as $file){
-    if (!$file->isFile()) continue;
-
-    if (!$file->isExecutable()){
-      $log->debug("Skipping non-executable {$stage} hook [".$file->getPathname()."]");
-      continue;
-    }
-    
-    $log->info("Executing {$stage} hook [".$file->getPathname()."]");
-    $cmd = $file->getPathname().' '.escapeshellarg($videoFile);
-    exec($cmd, $output, $returnValue);
-    if ($returnValue != 0){
-      $log->warn('['.$file->getPathname().'] had a non-zero return code');
-    }
-    $returnValues[] = $returnValue;
-  }
-  if (array_sum($returnValues) > 0){
-    return false;
-  }
-  return true;
-};
-
 //////////
 // Main //
 //////////
@@ -55,28 +26,21 @@ $log->info("Looking for video files in [{$directory}]");
 $i = new DirectoryIterator($directory);
 
 foreach ($i as $file){
+  $fullPath = realpath($file->getPathname());
   if (!$file->isFile()){
-    $log->debug('Skipping non-file ['.$file->getPathname().']');
+    $log->debug("Skipping non-file [{$fullPath}]");
     continue;
   }
   if (!$file->isReadable()){
-    $log->warn('Skipping non-readable file ['.$file->getPathname().']');
+    $log->warn("Skipping non-readable file [{$fullPath}]");
     continue;
   }
 
-  $hookResponse = $executeHooks('Preupload', $file->getPathname());
-  if (!$hookResponse){
-    $log->warn("At least one hook had a non-zero return code for [".$file->getPathname()."]; will not attempt upload");
-    continue;
-  }
-  $log->info('Attempting upload of ['.$file->getPathname().']');
+  $log->info("Attempting upload of [{$fullPath}]");
   
-  $cmd = __DIR__."/UploadSingle.php ".escapeshellarg($file->getPathname());
+  $cmd = __DIR__."/UploadSingle.php ".escapeshellarg($fullPath);
 
   passthru($cmd, $returnValue);
 
-  if ($returnValue == 0){
-    $executeHooks('Postupload', $file->getPathname());
-  }
 }
 
