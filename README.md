@@ -37,3 +37,4 @@ written in PHP are provided that do just this; albeit in a simplistic manner.
 
 ## Notes
 * The script will always check your upload quota before uploading videos
+* [GetID3](http://getid3.sourceforge.net/) is used for getting video title and description/comment
