@@ -16,7 +16,7 @@
 ## Usage instuctions
 You may either upload a single video:
 
-    ./Scripts/UploadSingle.php /path/to/video/file.avi
+    ./Scripts/UploadSingle.php /path/to/video/file.mp4
 
 Or upload videos from a directory:
 
@@ -33,4 +33,7 @@ the full path to the uploaded video as its only argument.
 
 The suggested use-case for hooks is to store an MD5 hash of a file post-upload, and checking if the MD5 hash
 of a file has already been stored on pre-upload to avoid uploading the same video twice. Some example hooks
-written in PHP are provided that do just this; albeit in a simplistic manner.
+written in PHP are provided that do just this; albeit in a simplistic manner. 
+
+## Notes
+* The script will always check your upload quota before uploading videos

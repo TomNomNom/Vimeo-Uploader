@@ -97,16 +97,19 @@ if (!$hookResponse){
 if (!$settings->debug['dry_run']){
   try {
 
+    $log->info("Attempting to upload [{$filename}]");
     $videoId = $client->upload($filename);
 
     if ($videoId) {
       // Set the title
+      $log->info("Setting video title as [".$file->getTitle()."]");
       $client->call('vimeo.videos.setTitle', array(
         'title'    => $file->getTitle(),
         'video_id' => $videoId
       ));
 
       // Set the description
+      $log->info("Setting video description as [".$file->getDescription()."]");
       $client->call('vimeo.videos.setDescription', array(
         'description' => $file->getDescription(),
         'video_id'    => $videoId
@@ -123,6 +126,8 @@ if (!$settings->debug['dry_run']){
   }
 } else {
   $log->debug("Performing dry run; would have attempted upload for [{$filename}]");
+  $log->debug("Title was [".$file->getTitle()."]");
+  $log->debug("Description was [".$file->getDescription()."]");
 }
 
 // It worked if we got this far

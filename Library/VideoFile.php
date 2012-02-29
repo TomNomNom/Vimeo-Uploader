@@ -1,6 +1,9 @@
 <?php
+require __DIR__.'/GetID3/getid3.php';
+
 class VideoFile {
   protected $filename;
+  protected $id3 = null;
 
   public function __construct($filename){
     if (!file_exists($filename)){
@@ -14,17 +17,42 @@ class VideoFile {
   }
 
   public function getID3(){
-    return id3_get_tag($this->filename);
+    // Ghetto; TODO: refactor
+    if (!$this->id3){
+      $getID3 = new getID3();
+      $info = $getID3->analyze($this->filename);
+      getid3_lib::CopyTagsToComments($info);
+      $info = isset($info['comments_html'])? $info['comments_html'] : array();
+      $info = array_map(function($comment){
+        return array_pop($comment);
+      }, $info);
+
+      $this->id3 = $info;
+    }
+
+    return $this->id3;
   }
 
   public function getTitle(){
-    // TODO: Get from ID3
-    return 'Default title';
+    $id3 = $this->getID3();
+    if (!isset($id3['title'])){
+      // Use the filename
+      $title = new SplFileInfo($this->filename);
+      $title = $title->getFilename();
+    } else {
+      $title = $id3['title'];
+    }
+    return $title;
   }
 
   public function getDescription(){
-    // TODO: Get from ID3
-    return 'Default description';
+    $id3 = $this->getID3();
+    if (!isset($id3['comment'])){
+      $description = 'No description';
+    } else {
+      $description = $id3['comment'];
+    }
+    return $description;
   }
 }
 
