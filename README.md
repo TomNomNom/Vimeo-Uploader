@@ -1,28 +1,40 @@
-A simple way to mirror your videos from Youtube to Vimeo.  Designed by someone who doesn't trust a single point of failure for his data.
+# Vimeo Uploader
 
-#IT DOES WUT?
-This tool copies all of the videos from your Youtube account to a Vimeo account.
+## Requirements
+* Linux of some description
+* PHP 5.3+
+* PHP Curl
+* Vimeo account
 
-#LIMITATIONS
-Vimeos API places a 15GB per week limit, we have to adhere to that.
+## Install instructions
+* [Register a new application with Vimeo](http://vimeo.com/api/applications/new); be sure to request uploader access
+* Download and extract [the code](https://github.com/TomNomNom/Vimeo-Uploader/tarball/master)
+* Copy config.example.ini to config.ini
+* Once your Vimeo application is approved update the consumer\_key and consumer\_secret settings in config.ini
+* Run ./Scripts/Authorize.php and follow the instructions
 
-#PIRATES!
-Do not use this tool for replicating copywritten material.  This tool is designed so users can distribute their content safely. 
+## Usage instuctions
+You may either upload a single video:
 
-#GOOGLE STAFF
-I know, I know..  This script isn't very "pro Youtube" but before you send me yet another email complaining please research my commitments to developing the open-web and online interopability.
+    ./Scripts/UploadSingle.php /path/to/video/file.mp4
 
-#GETTING STARTED
-* [Register for a Vimeo consumer and secret key at Vimeo.com](http://vimeo.com/api/applications/new)..   Wait for your keys..
-* [Download this Tool](https://github.com/johnyma22/Transfer-Video-from-Youtube-to-Vimeo/tarball/master).  
-* Extract the tar.gz file to a moist place
-* Open up config.php
-* Insert your vimeo keys and youtube username.
-* Save and Close config.php
-* Test by running index.php (php index.php)
-* Once you are happy, change debug to false in config.php and add a cron job if you like
+Or upload videos from a directory:
 
-#PRE-REQS
-* Php5+
-* Curl
-* A belief in Santa and Unicorns
+    ./Scripts/UploadMultiple.php /directory/full/of/videos
+
+## Hooks
+All executable files in ./Hooks/Preupload will be executed before a video is uploaded. Each hook will be given
+the full path to the video being uploaded as its only argument.
+
+**If any hooks have a non-zero return code the video will *not* be uploaded.**
+
+If the upload succeeds: all executable files in ./Hooks/Postupload will be executed. Each hook will be given 
+the full path to the uploaded video as its only argument.
+
+The suggested use-case for hooks is to store an MD5 hash of a file post-upload, and checking if the MD5 hash
+of a file has already been stored on pre-upload to avoid uploading the same video twice. Some example hooks
+written in PHP are provided that do just this; albeit in a simplistic manner. 
+
+## Notes
+* The script will always check your upload quota before uploading videos
+* [GetID3](http://getid3.sourceforge.net/) is used for getting video title and description/comment

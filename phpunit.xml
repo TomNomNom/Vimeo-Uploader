@@ -1,0 +1,10 @@
+<phpunit bootstrap="Include/Init.php">
+  <testsuites>
+    <testsuite name="Core">
+      <directory>Test</directory>
+    </testsuite>
+    <testsuite name="Library">
+      <directory>Library/Test</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

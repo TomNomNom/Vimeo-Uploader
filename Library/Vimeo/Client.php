@@ -1,5 +1,6 @@
 <?php
-class phpVimeo
+namespace Vimeo;
+class Client
 {
     const API_REST_URL = 'http://vimeo.com/api/rest/v2';
     const API_AUTH_URL = 'http://vimeo.com/oauth/authorize';
@@ -236,7 +237,7 @@ class phpVimeo
                 return $response;
             }
             else if ($response->err) {
-                throw new VimeoAPIException($response->err->msg, $response->err->code);
+                throw new Exception($response->err->msg, $response->err->code);
             }
 
             return false;
@@ -253,10 +254,19 @@ class phpVimeo
      */
     public function auth($permission = 'read', $callback_url = 'oob')
     {
+        $url = $this->getAuthUrl($permission, $callback_url);
+        header("Location: {$url}");
+    }
+
+    /**
+     * TomH
+     */
+    public function getAuthUrl($permission = 'read', $callback_url = 'oob')
+    {
         $t = $this->getRequestToken($callback_url);
         $this->setToken($t['oauth_token'], $t['oauth_token_secret'], 'request', true);
         $url = $this->getAuthorizeUrl($this->_token, $permission);
-        header("Location: {$url}");
+        return $url;
     }
 
     /**
@@ -278,7 +288,7 @@ class phpVimeo
     /**
      * Enable the cache.
      *
-     * @param string $type The type of cache to use (phpVimeo::CACHE_FILE is built in)
+     * @param string $type The type of cache to use (Client::CACHE_FILE is built in)
      * @param string $path The path to the cache (the directory for CACHE_FILE)
      * @param int $expire The amount of time to cache responses (default 10 minutes)
      */
@@ -397,7 +407,7 @@ class phpVimeo
         // Make sure we have enough room left in the user's quota
         $quota = $this->call('vimeo.videos.upload.getQuota');
         if ($quota->user->upload_space->free < $file_size) {
-            throw new VimeoAPIException('The file is larger than the user\'s remaining quota.', 707);
+            throw new Exception('The file is larger than the user\'s remaining quota.', 707);
         }
 
         // Get an upload ticket
@@ -413,7 +423,7 @@ class phpVimeo
 
         // Make sure we're allowed to upload this size file
         if ($file_size > $rsp->ticket->max_file_size) {
-            throw new VimeoAPIException('File exceeds maximum allowed size.', 710);
+            throw new Exception('File exceeds maximum allowed size.', 710);
         }
 
         // Split up the file if using multiple pieces
@@ -504,7 +514,7 @@ class phpVimeo
             return $complete->ticket->video_id;
         }
         else if ($complete->err) {
-            throw new VimeoAPIException($complete->err->msg, $complete->err->code);
+            throw new Exception($complete->err->msg, $complete->err->code);
         }
     }
 
@@ -527,7 +537,7 @@ class phpVimeo
     public static function url_encode_rfc3986($input)
     {
         if (is_array($input)) {
-            return array_map(array('phpVimeo', 'url_encode_rfc3986'), $input);
+            return array_map(array('\Vimeo\Client', 'url_encode_rfc3986'), $input);
         }
         else if (is_scalar($input)) {
             return str_replace(array('+', '%7E'), array(' ', '~'), rawurlencode($input));
@@ -539,4 +549,3 @@ class phpVimeo
 
 }
 
-class VimeoAPIException extends Exception {}

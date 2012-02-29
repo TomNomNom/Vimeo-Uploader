@@ -1,0 +1,11 @@
+# Library directory
+
+Files should contain abstract classes.
+
+There should be a matching directory for each abstract class that contains child classes. 
+
+## Example
+
+ * logger.php -> abstract class Logger
+ * logger/file.php -> class File extends \Logger
+ * logger/null.php -> class Null extends \Logger
