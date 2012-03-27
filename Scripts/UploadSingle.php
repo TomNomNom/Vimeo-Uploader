@@ -18,7 +18,7 @@ if ($argc < 2){
 }
 $filename = $argv[1];
 
-$executeHooks = function ($stage, $videoFile) use($log){
+$executeHooks = function ($stage, $videoFile, $videoId = null) use($log){
   $returnValues = array();
   $stage = ucFirst(strToLower($stage));
 
@@ -36,6 +36,9 @@ $executeHooks = function ($stage, $videoFile) use($log){
     
     $log->info("Executing {$stage} hook [{$fullPath}]");
     $cmd = $file->getPathname().' '.escapeshellarg($videoFile);
+    if ($videoId){
+      $cmd .= ' '.escapeshellarg($videoId);
+    }
     exec($cmd, $output, $returnValue);
     if ($returnValue != 0){
       $log->warn("[{$fullPath}] had a non-zero return code for [{$videoFile}]");
@@ -131,6 +134,6 @@ if (!$settings->debug['dry_run']){
 }
 
 // It worked if we got this far
-$executeHooks('Postupload', $filename);
+$executeHooks('Postupload', $filename, $videoId);
 
 exit(0);
